@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+// Copyright (C) 2026 Evan McClain
 /*
  * Neat NM-1000 mobile sheetfed scanner — device driver core (see nm1000.h).
  *

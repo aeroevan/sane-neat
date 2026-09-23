@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+// Copyright (C) 2026 Evan McClain
 /*
  * neatcap: drive Neat's own driver DLL through its SNCmd() entry point, the
  * same way its TWAIN data source does, and record the USB traffic.

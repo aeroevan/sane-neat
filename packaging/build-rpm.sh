@@ -1,4 +1,6 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+# Copyright (C) 2026 Evan McClain
 # Build the RPM in a throwaway Fedora container; output lands in dist/.
 #   FEDORA=43 ./packaging/build-rpm.sh
 set -eu

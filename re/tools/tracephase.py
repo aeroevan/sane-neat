@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+# Copyright (C) 2026 Evan McClain
 """Split a neatcap trace into SNCmd phases and summarise each phase as an
 ordered list of device operations (register writes, AFE writes, bulk
 uploads) so traces of different scan modes can be diffed."""

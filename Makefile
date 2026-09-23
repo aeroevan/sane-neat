@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+# Copyright (C) 2026 Evan McClain
+
 PREFIX ?= /usr
 LIBDIR ?= $(PREFIX)/lib64
 SYSCONFDIR ?= /etc

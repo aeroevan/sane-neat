@@ -69,3 +69,8 @@ many times timing-dependent polls repeat.
 - A bulk read with no scan data behind it locks the ASIC until it is unplugged,
   and a USB reset does not recover it. The driver never issues such a read.
   Don't remove the guard in `wait_for_data()`.
+
+## License
+
+GPL-2.0-or-later with the SANE exception (`GPL-2.0-or-later WITH SANE-exception`),
+the same terms as most SANE backends. See `LICENSE` and `COPYING`.

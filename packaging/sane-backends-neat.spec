@@ -2,8 +2,7 @@ Name:           sane-backends-neat
 Version:        0.1.0
 Release:        1%{?dist}
 Summary:        SANE backend for the Neat NM-1000 mobile sheetfed scanner
-# Placeholder: pick the license you want to publish this under.
-License:        LicenseRef-Unspecified
+License:        GPL-2.0-or-later WITH SANE-exception
 Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  gcc
@@ -28,6 +27,8 @@ the factory calibration stored in the scanner's own flash.
 %make_install LIBDIR=%{_libdir} PREFIX=%{_prefix} UDEVDIR=%{_udevrulesdir}
 
 %files
+%license COPYING LICENSE
+%doc README.md
 %{_libdir}/sane/libsane-neat.so.1
 %{_libdir}/sane/libsane-neat.so
 %{_bindir}/neat-scan

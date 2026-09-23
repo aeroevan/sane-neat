@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+// Copyright (C) 2026 Evan McClain
 /*
  * neat-scan: command-line test tool for the NM-1000 driver core.
  *

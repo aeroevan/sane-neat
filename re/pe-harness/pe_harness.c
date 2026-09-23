@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later WITH SANE-exception
+// Copyright (C) 2026 Evan McClain
 /*
  * pe_harness: load Neat's 64-bit Windows scanner DLL (neatmobilescanner_x64.dll)
  * into a Linux process, forward the usbscan.sys calls it makes to libusb, and
