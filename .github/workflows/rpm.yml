@@ -65,3 +65,32 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" dist/*.rpm \
             --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes
+
+  copr:
+    name: Publish to COPR
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [tables, rpm]
+    runs-on: ubuntu-latest
+    container: registry.fedoraproject.org/fedora:latest
+    env:
+      COPR_PROJECT: aeroevan/sane-neat
+    steps:
+      - name: Install copr-cli
+        run: dnf -y install copr-cli
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Build in COPR
+        env:
+          COPR_CONFIG: ${{ secrets.COPR_CONFIG }}
+        run: |
+          if [ -z "$COPR_CONFIG" ]; then
+            echo "::error::COPR_CONFIG secret is not set (contents of https://copr.fedorainfracloud.org/api/)"
+            exit 1
+          fi
+          mkdir -p ~/.config
+          printf '%s\n' "$COPR_CONFIG" > ~/.config/copr
+          # Every matrix job produces an equivalent SRPM; COPR rebuilds it per chroot.
+          srpm=$(ls dist/*.src.rpm | head -n1)
+          copr-cli build "$COPR_PROJECT" "$srpm"

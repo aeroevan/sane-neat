@@ -13,10 +13,28 @@ SANE frontend. It needs no Neat software at runtime.
 
 ## Install (Fedora, including Atomic desktops)
 
+Packages for current Fedora releases are published in the
+[aeroevan/sane-neat](https://copr.fedorainfracloud.org/coprs/aeroevan/sane-neat/) COPR:
+
+```sh
+# Regular Fedora
+sudo dnf copr enable aeroevan/sane-neat
+sudo dnf install sane-backends-neat
+
+# Atomic desktops (Silverblue, Kinoite, ...)
+sudo curl -o /etc/yum.repos.d/sane-neat.repo \
+  "https://copr.fedorainfracloud.org/coprs/aeroevan/sane-neat/repo/fedora-$(rpm -E %fedora)/aeroevan-sane-neat-fedora-$(rpm -E %fedora).repo"
+sudo rpm-ostree install sane-backends-neat
+```
+
+Updates then arrive with the normal `dnf upgrade` / `rpm-ostree upgrade`.
+
+To build the RPM yourself instead:
+
 ```sh
 ./packaging/build-rpm.sh            # builds dist/sane-backends-neat-*.rpm in a container
-sudo rpm-ostree install ./dist/sane-backends-neat-0.1.0-1.fc44.x86_64.rpm   # Atomic
-# or: sudo dnf install ./dist/sane-backends-neat-*.rpm                      # regular Fedora
+sudo rpm-ostree install ./dist/sane-backends-neat-[0-9]*.fc$(rpm -E %fedora).x86_64.rpm   # Atomic
+# or: sudo dnf install ./dist/sane-backends-neat-[0-9]*.fc$(rpm -E %fedora).x86_64.rpm    # regular Fedora
 ```
 
 On an Atomic desktop, reboot to switch to the new deployment (or try
