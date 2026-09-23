@@ -405,10 +405,14 @@ EXPORT SANE_Status sane_neat_control_option(SANE_Handle h, SANE_Int n, SANE_Acti
         for (int i = 1; i <= resolution_list[0]; i++)
             if (abs(resolution_list[i] - *w) < abs(best - *w))
                 best = resolution_list[i];
-        if (best != *w && info)
-            *info |= SANE_INFO_INEXACT;
+        /* Only write back on change: callers may pass read-only memory
+         * (simple-scan passes &option->constraint.range->max). */
+        if (best != *w) {
+            *w = best;
+            if (info)
+                *info |= SANE_INFO_INEXACT;
+        }
         s->resolution = best;
-        *w = best;
         if (info)
             *info |= SANE_INFO_RELOAD_PARAMS;
         return SANE_STATUS_GOOD;
@@ -416,9 +420,11 @@ EXPORT SANE_Status sane_neat_control_option(SANE_Handle h, SANE_Int n, SANE_Acti
     case OPT_TL_X: case OPT_TL_Y: case OPT_BR_X: case OPT_BR_Y: {
         const SANE_Range *r = s->opt[n].constraint.range;
         SANE_Fixed v = *w < r->min ? r->min : *w > r->max ? r->max : *w;
-        if (v != *w && info)
-            *info |= SANE_INFO_INEXACT;
-        *w = v;
+        if (v != *w) {
+            *w = v;
+            if (info)
+                *info |= SANE_INFO_INEXACT;
+        }
         if (n == OPT_TL_X) s->tl_x = v;
         if (n == OPT_TL_Y) s->tl_y = v;
         if (n == OPT_BR_X) s->br_x = v;

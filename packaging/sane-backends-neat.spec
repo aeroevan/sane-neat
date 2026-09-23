@@ -1,5 +1,5 @@
 Name:           sane-backends-neat
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        SANE backend for the Neat NM-1000 mobile sheetfed scanner
 License:        GPL-2.0-or-later WITH SANE-exception
@@ -36,5 +36,8 @@ the factory calibration stored in the scanner's own flash.
 %{_udevrulesdir}/70-neat-nm1000.rules
 
 %changelog
+* Wed Sep 23 2026 Evan <aeroevan@gmail.com> - 0.1.1-1
+- Fix segfault in SimpleScan when it sets the scan area to the maximum
+
 * Wed Sep 23 2026 Evan <aeroevan@gmail.com> - 0.1.0-1
 - Initial package
