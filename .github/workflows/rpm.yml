@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora: ['43', '44']
+        fedora: ['44', '45']
     container: registry.fedoraproject.org/fedora:${{ matrix.fedora }}
     steps:
       - name: Install build dependencies
