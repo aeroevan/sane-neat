@@ -4,6 +4,57 @@ A SANE backend (`neat`) for the **Neat NM-1000 / Neat Receipts mobile scanner**
 (USB `1f44:0001`), so it works with SimpleScan, `scanimage`, XSane and any other
 SANE frontend. It needs no Neat software at runtime.
 
+**ND-1000 (`1f44:0050`):** a separate, fully native SANE backend is available
+below. The original `neat` backend remains NM-1000-only; `build/nd1000-probe`
+can inspect the ND hardware. See [the investigation notes](re/README.md#nd-1000-investigation).
+
+### ND-1000 SANE backend (native)
+
+The `nd1000` backend drives the scanner directly through `src/nd1000.c`,
+replaying register programs captured from Neat's Windows driver; **no vendor
+software is needed at run time**. It decodes Color at 150/200/300/600 dpi on
+the **front** and supports 300 dpi **back/duplex**. Gray is derived from Color.
+The default is 300 dpi ADF Front. At 200 dpi the sensor-switch rows are
+interpolated and some artifacts remain. Other back-side resolutions are not
+yet decoded. The NM-1000 native driver below is independent.
+
+```sh
+make
+sudo bash packaging/install-nd1000.sh
+# Replug scanner; load one sheet and run:
+scanimage -L
+scanimage -d nd1000:usb:1f44:0050 --source 'ADF Front' --resolution 300 --format=png -o page.png
+scanimage -d nd1000:usb:1f44:0050 --source 'ADF Front' --resolution 600 --format=png -o page-600.png
+scanimage -d nd1000:usb:1f44:0050 --source 'ADF Duplex' --resolution 300 --format=png --batch='scan-%d.png' --batch-count=2
+```
+
+The installer also enables `saned.socket` (TCP 6566). It allows `127.0.0.1`,
+Tailscale (`100.64.0.0/10`) and, by default, this host's primary LAN subnet;
+set `ND_LAN_CIDR=YOUR_SUBNET/24` to override. On another Linux machine add this
+host's LAN or Tailscale address to `/etc/sane.d/net.conf` and use
+`scanimage -L`. The backend performs the page acquisition during `sane_start()`
+and then serves the buffered image to the frontend.
+
+To check the network path from the server itself, use the isolated client
+configuration in `dev-sane/` (net backend pointed at localhost):
+
+```sh
+SANE_CONFIG_DIR="$PWD/dev-sane" scanimage -L
+```
+
+Limitations: the scanner's native gray mode is not available (the vendor DLL
+crashes while capturing it), so `Gray` is produced by converting the colour
+scan. The vendor's trailing-edge end-of-paper registers are not yet decoded:
+the native scan always runs the full page height (so the sheet is ejected)
+and then uses a content-based trailing crop; the requested scan area is
+cropped from that. `SNCmd 0x13` is decoded as the inward feed/grab move; there
+is no eject command, so a cancelled scan instead finishes the pass (draining
+and discarding the rest of the image) to eject the sheet, which takes the
+remaining scan time. The standalone `nd1000-scan` tool shares the native
+full-pass decoder; like the SANE backend, it only offers duplex at 300 dpi.
+
+### NM-1000 features
+
 - Colour or gray, 150 / 200 / 300 / 600 dpi, full 8.5" width
 - Each sheet is scanned until its trailing edge passes the sensor, then ejected
 - Uses the factory calibration stored in the scanner's own flash (read once,
