@@ -27,6 +27,7 @@ enum nm1000_status {
     NM1000_ERR_NOMEM = -5,
     NM1000_ERR_BUSY = -6,
     NM1000_ERR_CANCELLED = -7,
+    NM1000_ERR_ACCESS = -8, /* udev rules not installed */
 };
 
 struct nm1000;
