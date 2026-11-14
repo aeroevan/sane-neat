@@ -125,6 +125,7 @@ const char *nm1000_strerror(int s)
     case NM1000_ERR_NOMEM: return "out of memory";
     case NM1000_ERR_BUSY: return "device busy";
     case NM1000_ERR_CANCELLED: return "cancelled";
+    case NM1000_ERR_ACCESS: return "permission denied";
     }
     return "unknown error";
 }
@@ -648,7 +649,7 @@ int nm1000_open(struct nm1000 **out, int bus, int address)
         dbg(1, "cannot open scanner: %s", libusb_error_name(r));
         libusb_exit(d->ctx);
         free(d);
-        return r == LIBUSB_ERROR_ACCESS ? NM1000_ERR_NODEV : NM1000_ERR_IO;
+        return r == LIBUSB_ERROR_ACCESS ? NM1000_ERR_ACCESS : NM1000_ERR_IO;
     }
     libusb_set_auto_detach_kernel_driver(d->h, 1);
     if ((r = libusb_claim_interface(d->h, 0))) {
