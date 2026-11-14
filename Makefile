@@ -38,6 +38,7 @@ install: all
 	install -Dm755 $(BUILD)/neat-scan $(DESTDIR)$(PREFIX)/bin/neat-scan
 	install -Dm644 packaging/dll.d-neat $(DESTDIR)$(SYSCONFDIR)/sane.d/dll.d/neat
 	install -Dm644 udev/70-neat-nm1000.rules $(DESTDIR)$(UDEVDIR)/70-neat-nm1000.rules
+	install -Dm644 neat-scan.1 $(DESTDIR)$(PREFIX)/share/man/man1/neat-scan.1
 
 clean:
 	rm -rf $(BUILD)

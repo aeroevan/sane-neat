@@ -87,6 +87,10 @@ many times timing-dependent polls repeat.
 - A bulk read with no scan data behind it locks the ASIC until it is unplugged,
   and a USB reset does not recover it. The driver never issues such a read.
   Don't remove the guard in `wait_for_data()`.
+- The neat-scan utility will not run out of the `/.build` folder since it needs
+  read access to the device. You must install the nm1000 rules and then reload
+  udev: `sudo udevadm control --reload`. If the device is already plugged in,
+  you must unplug it and plug it back in to trigger udev's grant of permission.
 
 ## License
 
